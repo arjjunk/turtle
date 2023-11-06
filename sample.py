@@ -1,32 +1,45 @@
-
 from sketchpy import canvas
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import tempfile
 import os
+import cv2
+import svgwrite
 
+#def convert_to_svg(input_path, output_path):
+    # Read the JPG image
+ #   img = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
+    
+    # Apply edge detection (Canny)
+  #  edges = cv2.Canny(img, 30, 100)
+    
+    # Find contours in the edge-detected image
+   # contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # SVG File Initialization:
+    #dwg = svgwrite.Drawing(output_path, size=(img.shape[1], img.shape[0]))
+
+    # Write SVG Path Data:
+    #for contour in contours:
+     #   points = [tuple(map(float, point[0])) for point in contour]
+      #  dwg.add(dwg.polygon(points, fill="black"))
+
+    # Save the SVG file
+    #dwg.save()
 
 def upload_file():
     global img_label
-    f_types = [('Jpg Files', '*.jpg'),('jpeg Files','*.jpeg')]
+    f_types = [('svg Files', '*.svg'), ('jpeg Files', '*.jpeg')]
     filename = filedialog.askopenfilename(filetypes=f_types)
-    img = Image.open(filename)
+    
+    # Convert JPG to SVG
+    temp_svg_path = os.path.join(tempfile.gettempdir(), "temp_image.svg")
+   # convert_to_svg(filename, temp_svg_path)
 
-    # Save the image to a temporary file
-    temp_file_path = os.path.join(tempfile.gettempdir(), "temp_image.jpg")
-    img.save(temp_file_path)
-
-
-    # Display the image
-    # img = ImageTk.PhotoImage(img)
-    # img_label.config(image=img)
-    # img_label.image = img
-
-    # Create a sketch from the temporary file
-    obj = canvas.sketch_from_image(temp_file_path)
+    # Display the SVG
+    obj = canvas.sketch_from_svg(filename,scale=70)
     obj.draw()
-
 
 my_w = tk.Tk()
 my_w.geometry("400x400")  # Adjusted the window size
@@ -43,4 +56,3 @@ img_label = tk.Label(my_w)
 img_label.grid(row=3, column=1)
 
 my_w.mainloop()
-
